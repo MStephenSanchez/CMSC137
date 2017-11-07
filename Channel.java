@@ -1,10 +1,6 @@
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.net.Socket;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
+import java.io.*;
+import java.net.*;
+import java.util.*;
 
 public class Channel implements Runnable
 {
@@ -79,6 +75,7 @@ public class Channel implements Runnable
 	
 	public void send(String msg)
 	{
+		// send message
 		writer.println(msg);
 		writer.flush();
 	}

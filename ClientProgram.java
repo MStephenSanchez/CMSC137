@@ -1,11 +1,6 @@
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.net.Socket;
-import java.net.UnknownHostException;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
+import java.io.*;
+import java.net.*;
+import java.util.*;
 
 public class ClientProgram implements OnSocketListener
 {
@@ -67,7 +62,7 @@ public class ClientProgram implements OnSocketListener
 	public static void main(String[] args) throws UnknownHostException, IOException
 	{
 		ClientProgram program = new ClientProgram();
-		program.start();
+		program.start();	// Start Client
 	}
 
 }

@@ -1,8 +1,6 @@
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.SocketException;
-import java.util.ArrayList;
+import java.io.*;
+import java.net.*;
+import java.util.*;
 
 public class Server implements Runnable
 {
@@ -45,11 +43,14 @@ public class Server implements Runnable
 		{
 			try
 			{
+				// accept incoming connection
 				Socket socket = serverSocket.accept();
 				
+				// create new channel for connection
 				Channel channel = new Channel(socket, onSocketListener);
 				channel.start();
 				
+				// add the channel to channel list
 				channels.add(channel);
 			} 
 			catch (SocketException e)

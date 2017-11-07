@@ -1,7 +1,6 @@
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.Scanner;
+import java.io.*;
+import java.net.*;
+import java.util.*;
 
 public class ServerProgram implements OnSocketListener
 {
@@ -50,7 +49,7 @@ public class ServerProgram implements OnSocketListener
 	{
 		Scanner scanner = new Scanner(System.in);
 
-		System.out.print("Port : ");
+		System.out.print("Port : ");	// Get Port
 		int port = Integer.parseInt(scanner.nextLine());
 		
 		server = new Server(this);
@@ -78,7 +77,7 @@ public class ServerProgram implements OnSocketListener
 	public static void main(String[] args) throws IOException
 	{
 		ServerProgram program = new ServerProgram();
-		program.start();
+		program.start();	// Start server
 	}
 
 }

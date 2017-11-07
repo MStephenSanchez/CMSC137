@@ -2,8 +2,13 @@
 
 ** Milestone 1 **
 
+// compile
 $ javac *.java <br>
-$ java ServerProgram (to start the server) <br>
-$ java ClientProgram (to start a client) <br>
+
+// to start the server (use appropriate port number)
+$ java ServerProgram <br>
+
+// to start a client
+$ java ClientProgram <br>
 
 go chat lul...
