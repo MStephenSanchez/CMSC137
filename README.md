@@ -2,8 +2,8 @@
 
 ** Milestone 1 **
 
-$ javac *.java
-$ java ServerProgram (to start the server)
-$ java ClientProgram (to start a client)
+$ javac *.java <br>
+$ java ServerProgram (to start the server) <br>
+$ java ClientProgram (to start a client) <br>
 
 go chat lul...
