@@ -4,22 +4,29 @@ import java.util.*;
 
 public class ClientProgram implements OnSocketListener
 {
+	private Server server;
+	private Chat chat;
+	private String name;
+	private String ip;
+	
 	@Override
 	public void onConnected(Channel channel)
 	{
-		System.out.println("Connected.");
+		if(chat!=null){
+			chat.show("Connected to "+ ip);
+		}
 	}
 	
 	@Override
 	public void onDisconnected(Channel channel)
 	{
-		System.out.println("Disconnected.");
+		chat.show("Disconnected.");
 	}
 	
 	@Override
 	public void onReceived(Channel channel, String msg)
 	{
-		System.out.println(msg);
+		chat.show(msg);
 	}
 	
 	public void start() throws UnknownHostException, IOException
@@ -30,38 +37,36 @@ public class ClientProgram implements OnSocketListener
 		String name = scanner.nextLine();
 		
 		System.out.print("IP : ");
-		String ip = scanner.nextLine();
+		ip = scanner.nextLine();
 		
 		System.out.print("Port : ");
 		int port = Integer.parseInt(scanner.nextLine());
 		
 		Socket socket = new Socket(ip, port);
-		System.out.println("Connected");
 		
-		// Receive
+//		 Receive
 		Channel channel = new Channel(socket, this);
+		chat = new Chat(channel,name);
+
+		
 		channel.start();
-	
-		// Send
-		while(true)
-		{
-			String msg = scanner.nextLine();
-			
-			if(msg.isEmpty())
-				break;
-			
-			channel.send(name + " >> " + msg);
-		}
 		
-		scanner.close();
-		channel.stop();
 		
-		System.out.println("Closed");
+		
+//		// Send
+//		while(true)
+//		{
+//			String msg = scanner.nextLine();
+//			
+//			if(msg.isEmpty())
+//				break;
+//			
+//			channel.send(name + " >> " + msg);
+//		}
+//		
+//		scanner.close();
+//		channel.stop();
+//		
+//		System.out.println("Closed");
 	}
-
-	public static void main(String[] args) throws UnknownHostException, IOException
-	{
-		
-	}
-
 }

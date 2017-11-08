@@ -50,6 +50,7 @@ public class App {
 			public void actionPerformed(ActionEvent e) {
 				ServerProgram program = new ServerProgram();
 				frame.setVisible(false);
+				frame.dispose();
 				try {
 					program.start();
 				} catch (IOException e1) {
@@ -67,6 +68,7 @@ public class App {
 			public void actionPerformed(ActionEvent e) {
 				ClientProgram program = new ClientProgram();
 				frame.setVisible(false);
+				frame.dispose();
 				try {
 					program.start();
 				} catch (IOException e1) {

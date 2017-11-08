@@ -1,3 +1,4 @@
+
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -6,6 +7,7 @@ public class ServerProgram implements OnSocketListener
 {
 	private Server server;
 	private Chat chat;
+	private String name;
 	
 	@Override
 	public void onConnected(Channel channel)
@@ -15,7 +17,7 @@ public class ServerProgram implements OnSocketListener
 		int port = socket.getPort();
 		
 		String msg = "Client connected from " + hostName + ":" + port;
-		System.out.println(msg);
+		chat.show(msg);
 		
 		for (Channel c : server.getChannels())
 		{
@@ -34,15 +36,15 @@ public class ServerProgram implements OnSocketListener
 		int port = socket.getPort();
 		
 		String msg = "Client disconnected from " + hostName + ":" + port;
-		System.out.println();
-		
+
+		chat.show(msg);
 		server.broadcast(msg);
 	}
 	
 	@Override
 	public void onReceived(Channel channel, String msg)
 	{
-		System.out.println(msg);
+		chat.show(msg);
 		server.broadcast(msg);
 	}
 	
@@ -53,28 +55,14 @@ public class ServerProgram implements OnSocketListener
 		System.out.print("Port : ");	// Get Port
 		int port = Integer.parseInt(scanner.nextLine());
 		
+		System.out.print("Name : ");
+		String name = scanner.nextLine();
+		
 		server = new Server(this);
 		server.bind(port); // Open Server
 		server.start(); // Start Accept Thread
-		
-		chat = new Chat();
-		
-		System.out.println("Server has started on "+server.getIPaddress());
-
-		// Send
-		while (true)
-		{
-			String msg = scanner.nextLine();
-
-			if (msg.isEmpty())
-				break;
-
-			server.broadcast("Server >> " + msg);
-		}
-		
-		scanner.close();
-		server.stop();
-
-		System.out.println("Server has closed.");
+		chat = new Chat(server,name);
+		chat.show("Server has started on "+server.getIPaddress().getLocalHost().getHostAddress());	
 	}
 }
+
