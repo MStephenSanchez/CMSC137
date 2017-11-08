@@ -61,8 +61,7 @@ public class ClientProgram implements OnSocketListener
 
 	public static void main(String[] args) throws UnknownHostException, IOException
 	{
-		ClientProgram program = new ClientProgram();
-		program.start();	// Start Client
+		
 	}
 
 }
