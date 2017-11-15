@@ -1,14 +1,10 @@
 # CMSC137
 
-** Milestone 1 **
+//How to run?
 
-// to compile <br>
-$ javac *.java <br>
+1. Import project into eclipse. <br>
+2. Run the project. <br>
+3. Whoooo. <br>
 
-// to start the server (use appropriate port number) <br>
-$ java ServerProgram <br>
 
-// to start a client <br>
-$ java ClientProgram <br>
-
-go chat lul...
+//Milestone 1 Chat resource: https://www.youtube.com/playlist?list=PLM3OudYHhzP3PyjhEAXwMRrKE64nvcAyP [Part 01-10]

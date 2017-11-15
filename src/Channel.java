@@ -14,20 +14,24 @@ public class Channel implements Runnable
 	
 	public Channel(Socket socket, OnSocketListener onSocketListener)
 	{
+		//create socket for the channel
 		this.socket = socket;
 		this.onSocketListener = onSocketListener;
 	}
 	
 	public void start()
 	{
+		//run a thread per channel
 		Thread thread = new Thread(this);
 		thread.start();
 	}
 	
 	public void stop() throws IOException
 	{
+		//stop channel
 		running = false;
 		
+		//close writer, reader and socket
 		writer.close();
 		reader.close();
 		socket.close();
@@ -38,9 +42,11 @@ public class Channel implements Runnable
 	{
 		try
 		{
+			//create output stream for writing output
 			OutputStream outputStream = socket.getOutputStream();
 			writer = new PrintWriter(outputStream);
 			
+			//create input stream for reading input
 			InputStream inputStream = socket.getInputStream();
 			reader = new Scanner(inputStream);
 			
@@ -52,9 +58,11 @@ public class Channel implements Runnable
 			{
 				try
 				{
+					//read input message
 					String msg = reader.nextLine();
 
 					if(null != onSocketListener)
+						//show message on chat
 						onSocketListener.onReceived(this, msg);
 				}
 				catch(NoSuchElementException e)
@@ -64,6 +72,7 @@ public class Channel implements Runnable
 			}
 			
 			if(null != onSocketListener)
+				//channel disconnected
 				onSocketListener.onDisconnected(this);
 		}
 		catch(IOException e)
@@ -82,6 +91,7 @@ public class Channel implements Runnable
 	
 	public Socket getSocket()
 	{
+		//get socket of channel
 		return socket;
 	}
 }

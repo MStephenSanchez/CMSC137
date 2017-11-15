@@ -11,17 +11,21 @@ public class Server implements Runnable
 	
 	private OnSocketListener onSocketListener;
 	
+	public int playerCount = 1;
+	
 	public Server(OnSocketListener onSocketListener)
 	{
 		this.onSocketListener = onSocketListener;
 	}
 	
 	public InetAddress getIPaddress() {
+		//get server IP
 		return serverSocket.getInetAddress();
 	}
 	
 	public void bind(int port) throws IOException
 	{
+		//create new server socket
 		this.serverSocket = new ServerSocket(port);
 	}
 	
@@ -33,13 +37,16 @@ public class Server implements Runnable
 
 	public void stop() throws IOException
 	{
+		//stop server
 		running = false;
+		//close server socket
 		serverSocket.close();
 	}
 	
 	@Override
 	public void run()
 	{
+		//create channel list
 		channels = new ArrayList<>();
 		
 		running = true;
@@ -53,7 +60,8 @@ public class Server implements Runnable
 				// create new channel for connection
 				Channel channel = new Channel(socket, onSocketListener);
 				channel.start();
-				
+				playerCount = playerCount + 1;
+				System.out.println(playerCount);
 				// add the channel to channel list
 				channels.add(channel);
 			} 
@@ -71,9 +79,10 @@ public class Server implements Runnable
 		{
 			for(Channel channel : channels)
 			{
+				//stop all channels when server dies
 				channel.stop();
 			}
-			
+			//clear channel list
 			channels.clear();
 		}
 		catch(IOException e)
@@ -89,6 +98,7 @@ public class Server implements Runnable
 		
 		for(Channel channel : channels)
 		{
+			//send message to each channel
 			channel.send(msg);
 		}
 	}
@@ -97,12 +107,13 @@ public class Server implements Runnable
 	{
 		if(!running)
 			return;
-		
+		//remove a channel (disconnect)
 		channels.remove(channel);
 	}
 	
 	public ArrayList<Channel> getChannels()
 	{
+		//get list of channels
 		return channels;
 	}
 }
