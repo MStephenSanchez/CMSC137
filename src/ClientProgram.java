@@ -5,16 +5,23 @@ import java.util.*;
 public class ClientProgram implements OnSocketListener
 {
 	private Socket socket;
-	private Chat chat;
 	private String name;
 	private SwingPaint swingpaint;
 	private String ip;
+	private int port;
+	private App app;
+	
+	public ClientProgram(String name, String ip, int port, App app){
+		this.ip = ip;
+		this.port = port;
+		this.name = name;
+		this.app = app;
+	}
 	
 	@Override
 	public void onConnected(Channel channel)
 	{
-		if(chat!=null){
-			chat.show("Connected to "+ ip);
+			app.addChat("Connected to "+ ip);
 		    this.swingpaint = new SwingPaint(getIp(),true);
 		    swingpaint.show();
 		    try {
@@ -23,19 +30,18 @@ public class ClientProgram implements OnSocketListener
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}
 	}
 	
 	@Override
 	public void onDisconnected(Channel channel)
 	{
-		chat.show("Disconnected.");
+		app.addChat("Disconnected.");
 	}
 	
 	@Override
 	public void onReceived(Channel channel, String msg)
 	{
-		chat.show(msg);
+		app.addChat(msg);
 	}
 	
 	public InetAddress getIp(){		
@@ -47,21 +53,11 @@ public class ClientProgram implements OnSocketListener
 	{
 		Scanner scanner = new Scanner(System.in);
 		
-		System.out.print("Name : ");
-		String name = scanner.nextLine();
-		
-		System.out.print("IP : ");
-		ip = scanner.nextLine();
-		
-		System.out.print("Port : ");
-		int port = Integer.parseInt(scanner.nextLine());
-		
 		socket = new Socket(ip, port);
 		
 //		Receive
 		Channel channel = new Channel(socket, this);
-		chat = new Chat(channel,name);
-		
+		app.addChannel(channel);
 		channel.start();
 		
 		

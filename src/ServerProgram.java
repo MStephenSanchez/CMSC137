@@ -1,4 +1,5 @@
 
+import java.awt.TextArea;
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -6,10 +7,15 @@ import java.util.*;
 public class ServerProgram implements OnSocketListener
 {
 	private Server server;
-	private Chat chat;
 	private String name;
 	private SwingPaint swingpaint;
+	private App app;
 	private ArrayList<InetAddress> clientList = new ArrayList<InetAddress>();
+	
+	public ServerProgram(String name, App app){
+		this.name = name;
+		this.app = app;
+	}
 	
 	@Override
 	public void onConnected(Channel channel)
@@ -25,7 +31,7 @@ public class ServerProgram implements OnSocketListener
 		int port = socket.getPort();
 		clientList.add(socket.getInetAddress());
 		String msg = "Client connected from " + hostName + ":" + port;
-		chat.show(msg);
+		app.addChat(msg);
 
 		for (Channel c : server.getChannels())
 		{
@@ -45,14 +51,14 @@ public class ServerProgram implements OnSocketListener
 		
 		String msg = "Client disconnected from " + hostName + ":" + port;
 
-		chat.show(msg);
+		app.addChat(msg);
 		server.broadcast(msg);
 	}
 	
 	@Override
 	public void onReceived(Channel channel, String msg)
 	{
-		chat.show(msg);
+		app.addChat(msg);
 		server.broadcast(msg);
 	}
 	
@@ -63,17 +69,14 @@ public class ServerProgram implements OnSocketListener
 		//System.out.print("Port : ");	// Get Port
 		int port = 8000;//Integer.parseInt(scanner.nextLine());
 		
-		System.out.print("Name : ");
-		String name = scanner.nextLine();
-		
 		server = new Server(this);
 		server.bind(port); // Open Server
 		server.start(); // Start Accept Thread
 		swingpaint = new SwingPaint(server.getIPaddress(),false);
 	    swingpaint.show();
 	    new DatagramServer(swingpaint,clientList).start();
-		chat = new Chat(server,name);
-		chat.show("Server has started on "+server.getIPaddress().getLocalHost().getHostAddress());	
+		app.addSever(server);
+		app.addChat("Server has started on "+server.getIPaddress().getLocalHost().getHostAddress());	
 	    
 	}
 }

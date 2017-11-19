@@ -16,13 +16,16 @@ import java.awt.Container;
 import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 
 public class Login {
 	
@@ -31,6 +34,12 @@ public class Login {
 	private JButton play;
 	TextField name, port, ip;
 	private JPanel panel = new JPanel();
+	private JRadioButton newGame;
+	private JRadioButton joinGame;
+	private JPanel joinPanel;
+	private JPanel optionPanel;
+	private Boolean isServer = true;
+	ButtonGroup group;
 	
 	//After clicking the Play button, the main game window will open (App class)
 	ActionListener actionListener = new ActionListener() {
@@ -38,20 +47,31 @@ public class Login {
 		  public void actionPerformed(ActionEvent e) {
 		      if (e.getSource() == play) {
 		    	  //will ask to enter a name and/or IP address before entering the game
-		    	  if(name.getText().isEmpty() && ip.getText().isEmpty()) {
-		    		  JOptionPane.showMessageDialog(frame, "Enter your Name and IP Address");
-		    	  } else if(name.getText().isEmpty()) {
+		    	  if(name.getText().isEmpty()) {
 		    		  JOptionPane.showMessageDialog(frame, "Enter your Name");
-		    	  } else if(ip.getText().isEmpty()) {
+		    	  } else if(ip.getText().isEmpty() && group.getSelection() == joinGame.getModel()) {
 		    		  JOptionPane.showMessageDialog(frame, "Enter IP Address");
 		    	  }
 		    	  else {
 		    		  frame.dispose();
-		    		  new App(name.getText(), port.getText(), ip.getText()).show();
+		    		  try {
+						new App(name.getText(), port.getText(), ip.getText(), isServer).show();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 		    	  }
 		    	
+		      }else if(e.getSource() == newGame){
+		    	  isServer = true;
+		  		  frame.setSize(350,170);
+		    	  joinPanel.setVisible(false);
+		      }else if(e.getSource() == joinGame){
+		    	  isServer = false;
+		  		  frame.setSize(350,270);
+		    	  joinPanel.setVisible(true);
 		      }
-		  }
+		  }		  
 	};
 	
 	public static void main(String[] args) {
@@ -70,6 +90,13 @@ public class Login {
 		
 		nameLabel = new JLabel("Enter your Name:", JLabel.CENTER);
 		welcome = new JLabel("Welcome to DRAWING DRAWING!", JLabel.CENTER);
+		
+		newGame= new JRadioButton("New Game");
+		joinGame= new JRadioButton("Join Game");
+
+		newGame.addActionListener(actionListener);
+		joinGame.addActionListener(actionListener);
+		
 		portLabel = new JLabel("Enter port number:", JLabel.CENTER);
 		ipLabel = new JLabel("Enter IP Address:", JLabel.CENTER);
 		
@@ -93,6 +120,15 @@ public class Login {
 		namePanel.add(nameLabel);
 		namePanel.add(name);
 		
+		optionPanel = new JPanel();
+	    group = new ButtonGroup();
+	    group.add(newGame);
+	    group.add(joinGame);
+		optionPanel.add(newGame);
+		optionPanel.add(joinGame);	
+		
+		joinPanel = new JPanel();
+		
 		JPanel portPanel = new JPanel();
 		portPanel.add(portLabel);
 		portPanel.add(port);
@@ -101,16 +137,22 @@ public class Login {
 		ipPanel.add(ipLabel);
 		ipPanel.add(ip);
 		
-		panel.add(welcome);
-		panel.add(namePanel);
-		panel.add(ipPanel);
-		panel.add(portPanel);
+		panel.add(welcome,BorderLayout.NORTH);
+		panel.add(namePanel,BorderLayout.CENTER);
+		panel.add(optionPanel,BorderLayout.CENTER);
+		joinPanel.add(ipPanel,BorderLayout.CENTER);
+		joinPanel.add(portPanel,BorderLayout.CENTER);
+		panel.add(joinPanel,BorderLayout.SOUTH);
 		panel.add(play);
 		
 		content.add(panel, BorderLayout.CENTER);
 		
+		joinPanel.setVisible(false);
+		
+		group.setSelected(newGame.getModel(), true);
+		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		
-		frame.setSize(350,220);
+		frame.setSize(350,170);
 		frame.setLocationRelativeTo(null);
 		frame.setResizable(false);
 		frame.setVisible(true);

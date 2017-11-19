@@ -16,7 +16,14 @@ import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
- 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+
+import javax.imageio.ImageIO;
 import javax.swing.JComponent;
  
 /* REFERENCE : http://www.ssaurel.com/blog/learn-how-to-make-a-swing-painting-and-drawing-application/ */
@@ -83,8 +90,44 @@ public class DrawArea extends JComponent {
     repaint();
   }
  
-  //Insert functions here 
-
+//Insert functions here 
+  
+  public void SendData() throws IOException{
+	  byte[] buffer = getByteImage().toByteArray();
+	  if(isClient){
+	      DatagramSocket datagramSocket = new DatagramSocket();
+	      DatagramPacket packet = new DatagramPacket(buffer, buffer.length, ip, port);
+	      packet.setData(buffer);
+	      datagramSocket.send(packet);
+	      datagramSocket.close();
+	  }else{
+		  if(ds!=null){
+		      ds.multiSendData(buffer);
+		  }
+	  }
+  }
+  
+  public void setDrawArea(byte[] img) throws IOException{
+	  BufferedImage bimg = (ImageIO.read(new ByteArrayInputStream(img)));
+	  g2.drawImage(bimg, null, 0, 0);
+	  repaint();
+  }
+  
+  //returns converted byte stream from image 
+  private ByteArrayOutputStream getByteImage(){
+	  ByteArrayOutputStream output = new ByteArrayOutputStream();      
+	  BufferedImage bufferedImage = new BufferedImage(image.getWidth(null), image.getHeight(null),BufferedImage.TYPE_INT_ARGB);
+	  Graphics g = bufferedImage.getGraphics();
+	  g.drawImage(image, 0, 0, null);
+	  try {
+		ImageIO.write(bufferedImage, "jpg", output);
+	  } catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	  }
+	  return output;
+  }
+  
   public void red() {
     // apply red color on g2 context
     g2.setPaint(Color.red);
