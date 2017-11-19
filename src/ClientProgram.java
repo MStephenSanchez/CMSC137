@@ -4,9 +4,10 @@ import java.util.*;
 
 public class ClientProgram implements OnSocketListener
 {
-	private Server server;
+	private Socket socket;
 	private Chat chat;
 	private String name;
+	private SwingPaint swingpaint;
 	private String ip;
 	
 	@Override
@@ -14,6 +15,14 @@ public class ClientProgram implements OnSocketListener
 	{
 		if(chat!=null){
 			chat.show("Connected to "+ ip);
+		    this.swingpaint = new SwingPaint(getIp(),true);
+		    swingpaint.show();
+		    try {
+				new DatagramClient(swingpaint).start();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -29,6 +38,11 @@ public class ClientProgram implements OnSocketListener
 		chat.show(msg);
 	}
 	
+	public InetAddress getIp(){		
+		return 	socket.getInetAddress();
+
+	}
+	
 	public void start() throws UnknownHostException, IOException
 	{
 		Scanner scanner = new Scanner(System.in);
@@ -42,12 +56,11 @@ public class ClientProgram implements OnSocketListener
 		System.out.print("Port : ");
 		int port = Integer.parseInt(scanner.nextLine());
 		
-		Socket socket = new Socket(ip, port);
+		socket = new Socket(ip, port);
 		
-//		 Receive
+//		Receive
 		Channel channel = new Channel(socket, this);
 		chat = new Chat(channel,name);
-
 		
 		channel.start();
 		
