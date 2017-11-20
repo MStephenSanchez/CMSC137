@@ -72,9 +72,9 @@ public class ServerProgram implements OnSocketListener
 		server = new Server(this);
 		server.bind(port); // Open Server
 		server.start(); // Start Accept Thread
-		swingpaint = new SwingPaint(server.getIPaddress(),false);
-	    swingpaint.show();
-	    new DatagramServer(swingpaint,clientList).start();
+//		swingpaint = new SwingPaint(server.getIPaddress(),false);
+//	    swingpaint.show();
+//	    new DatagramServer(swingpaint,clientList).start();
 		app.addSever(server);
 		app.addChat("Server has started on "+server.getIPaddress().getLocalHost().getHostAddress());	
 	    

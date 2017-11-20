@@ -56,13 +56,13 @@ public class App {
 	      } else if(e.getSource() == enterChat) {
 //	    	  chatArea.append(playerName + ": " + enterChat.getText() + "\n");
 	    	  if(server!=null){
-					server.broadcast(playerName +">> " + enterChat.getText());
+					server.broadcast(playerName +": " + enterChat.getText());
 					addChat(playerName +": " + enterChat.getText());
 				}else{
 					channel.send(playerName + ": " + enterChat.getText());
 				}
 				enterChat.setText("");
-	    	  enterChat.setText("Type your guess here...");
+//	    	  enterChat.setText("Type your guess here...");
 	    	  enterChat.selectAll();
 	      }
 	    }
@@ -126,7 +126,7 @@ public class App {
 	    
 	    //Chat panel
 	    JPanel chat = new JPanel();
-	    enterChat = new JTextField("Type your guess here...");
+	    enterChat = new JTextField("");
 	    enterChat.addActionListener(actionListener);
 	    
 	    chatArea = new TextArea(29,25);

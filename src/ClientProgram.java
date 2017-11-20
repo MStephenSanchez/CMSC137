@@ -22,14 +22,14 @@ public class ClientProgram implements OnSocketListener
 	public void onConnected(Channel channel)
 	{
 			app.addChat("Connected to "+ ip);
-		    this.swingpaint = new SwingPaint(getIp(),true);
-		    swingpaint.show();
-		    try {
-				new DatagramClient(swingpaint).start();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+//		    this.swingpaint = new SwingPaint(getIp(),true);
+//		    swingpaint.show();
+//		    try {
+//				new DatagramClient(swingpaint).start();
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
 	}
 	
 	@Override
