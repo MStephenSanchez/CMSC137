@@ -60,6 +60,12 @@ public class DrawArea extends JComponent {
           // store current coords x,y as olds x,y
           oldX = currentX;
           oldY = currentY;
+          try { 
+              SendData();
+      	  } catch (IOException exception) {
+      		// TODO Auto-generated catch block
+      		exception.printStackTrace();
+      	  }
         }
       }
     });
@@ -79,12 +85,6 @@ public class DrawArea extends JComponent {
     }
  
     g.drawImage(image, 0, 0, null);
-    try { 
-        SendData();
-	} catch (IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
   }
  
   // now we create exposed methods
@@ -94,6 +94,12 @@ public class DrawArea extends JComponent {
     g2.fillRect(0, 0, getSize().width, getSize().height);
     g2.setPaint(Color.black);
     repaint();
+    try { 
+        SendData();
+	} catch (IOException exception) {
+		// TODO Auto-generated catch block
+		exception.printStackTrace();
+	}
   }
  
   //Insert functions here 
@@ -132,6 +138,10 @@ public class DrawArea extends JComponent {
 		e.printStackTrace();
 	  }
 	  return output;
+  }
+  
+  public void setDatagramServer(DatagramServer ds){
+	  this.ds = ds;
   }
   
   public void red() {

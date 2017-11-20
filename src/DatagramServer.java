@@ -13,28 +13,19 @@ import javax.imageio.ImageIO;
 
 public class DatagramServer extends Thread{
 	int port = 8000;
-	private SwingPaint canvas;
+	private App app;
 	private ArrayList<InetAddress> clientList;
     protected DatagramSocket socket = null;
 
-	public DatagramServer(SwingPaint canvas, ArrayList<InetAddress> clientList) throws SocketException{
+	public DatagramServer(App app, ArrayList<InetAddress> clientList) throws SocketException{
 		super("DatagramServer");
 		this.clientList = clientList;
-		this.canvas = canvas;
+		this.app = app;
 		socket = new DatagramSocket(port);
-		canvas.setDatagramServer(this);
+		app.drawArea.setDatagramServer(this);
 	}
 	
 	public void multiSendData(byte[] buffer) throws IOException{
-//		for(InetAddress ip:clientList){
-////			if(ip!=blacklist){
-//			    DatagramSocket datagramSocket = new DatagramSocket();
-//			    DatagramPacket packet = new DatagramPacket(buffer, buffer.length, ip, 8001);
-//			    packet.setData(buffer);
-//			    datagramSocket.send(packet);
-//			    datagramSocket.close();
-////			}
-//		}
 		InetAddress groupAddress = InetAddress.getByName("234.5.8.7");
         DatagramPacket packet;
         packet = new DatagramPacket(buffer, buffer.length, groupAddress, 8001);
@@ -53,7 +44,7 @@ public class DatagramServer extends Thread{
 	                socket.receive(packet);
 	                
 	                // show request to canvas
-	                canvas.drawArea.setDrawArea(packet.getData());
+	                app.drawArea.setDrawArea(packet.getData());
 
 	                //send request data to other clients
 	                multiSendData(packet.getData());

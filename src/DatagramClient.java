@@ -8,13 +8,13 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 public class DatagramClient extends Thread {
-	private SwingPaint canvas;
+	private App app;
 	private MulticastSocket socket;
 	private InetAddress groupIp;
 
-	public DatagramClient(SwingPaint canvas) throws IOException {
+	public DatagramClient(App app) throws IOException {
 		super("DatagramClient");
-		this.canvas = canvas;
+		this.app = app;
 		groupIp = InetAddress.getByName("234.5.8.7");
 		socket = new MulticastSocket(8001);
 		socket.joinGroup(groupIp);
@@ -30,7 +30,7 @@ public class DatagramClient extends Thread {
 				DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
 				socket.receive(packet);
 				// show request to canvas
-				canvas.drawArea.setDrawArea(packet.getData());
+				app.drawArea.setDrawArea(packet.getData());
 
 			} catch (IOException e) {
 				e.printStackTrace();

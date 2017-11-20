@@ -6,7 +6,6 @@ public class ClientProgram implements OnSocketListener
 {
 	private Socket socket;
 	private String name;
-	private SwingPaint swingpaint;
 	private String ip;
 	private int port;
 	private App app;
@@ -22,14 +21,12 @@ public class ClientProgram implements OnSocketListener
 	public void onConnected(Channel channel)
 	{
 			app.addChat("Connected to "+ ip);
-//		    this.swingpaint = new SwingPaint(getIp(),true);
-//		    swingpaint.show();
-//		    try {
-//				new DatagramClient(swingpaint).start();
-//			} catch (IOException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
+		    try {
+				new DatagramClient(app).start();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	}
 	
 	@Override
@@ -59,23 +56,5 @@ public class ClientProgram implements OnSocketListener
 		Channel channel = new Channel(socket, this);
 		app.addChannel(channel);
 		channel.start();
-		
-		
-		
-//		// Send
-//		while(true)
-//		{
-//			String msg = scanner.nextLine();
-//			
-//			if(msg.isEmpty())
-//				break;
-//			
-//			channel.send(name + " >> " + msg);
-//		}
-//		
-//		scanner.close();
-//		channel.stop();
-//		
-//		System.out.println("Closed");
 	}
 }

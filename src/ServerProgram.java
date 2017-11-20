@@ -8,7 +8,6 @@ public class ServerProgram implements OnSocketListener
 {
 	private Server server;
 	private String name;
-	private SwingPaint swingpaint;
 	private App app;
 	private ArrayList<InetAddress> clientList = new ArrayList<InetAddress>();
 	
@@ -72,9 +71,7 @@ public class ServerProgram implements OnSocketListener
 		server = new Server(this);
 		server.bind(port); // Open Server
 		server.start(); // Start Accept Thread
-//		swingpaint = new SwingPaint(server.getIPaddress(),false);
-//	    swingpaint.show();
-//	    new DatagramServer(swingpaint,clientList).start();
+	    new DatagramServer(app,clientList).start();
 		app.addSever(server);
 		app.addChat("Server has started on "+server.getIPaddress().getLocalHost().getHostAddress());	
 	    
