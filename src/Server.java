@@ -37,6 +37,17 @@ public class Server implements Runnable
 		serverSocket.close();
 	}
 	
+	public void broadcast(String msg)
+	{
+		if(!running)
+			return;
+		
+		for(Channel channel : channels)
+		{
+			channel.send(msg);
+		}
+	}
+	
 	@Override
 	public void run()
 	{
@@ -82,16 +93,6 @@ public class Server implements Runnable
 		}
 	}
 
-	public void broadcast(String msg)
-	{
-		if(!running)
-			return;
-		
-		for(Channel channel : channels)
-		{
-			channel.send(msg);
-		}
-	}
 	
 	public void remove(Channel channel)
 	{

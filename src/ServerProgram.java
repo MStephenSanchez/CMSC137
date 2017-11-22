@@ -10,12 +10,16 @@ public class ServerProgram implements OnSocketListener
 	private String name;
 	private App app;
 	private ArrayList<InetAddress> clientList = new ArrayList<InetAddress>();
+	private int currPlayerId = 0;
 	
 	public ServerProgram(String name, App app){
 		this.name = name;
 		this.app = app;
 	}
 	
+	public int updatePlayerIds(){
+		return currPlayerId++;
+	}
 	@Override
 	public void onConnected(Channel channel)
 	{
@@ -29,7 +33,7 @@ public class ServerProgram implements OnSocketListener
 		}
 		int port = socket.getPort();
 		clientList.add(socket.getInetAddress());
-		String msg = "Client connected from " + hostName + ":" + port;
+		String msg = "Client connected from " + hostName + ":" + port + ":" + updatePlayerIds();
 		app.addChat(msg);
 
 		for (Channel c : server.getChannels())
@@ -72,9 +76,14 @@ public class ServerProgram implements OnSocketListener
 		server.bind(port); // Open Server
 		server.start(); // Start Accept Thread
 	    new DatagramServer(app,clientList).start();
-		app.addSever(server);
+	    System.out.println("ADADDss");
+		app.addServer(server);
 		app.addChat("Server has started on "+server.getIPaddress().getLocalHost().getHostAddress());	
 	    
+	}
+	
+	public Server getServer(){
+		return server;
 	}
 }
 

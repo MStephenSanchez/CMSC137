@@ -1,4 +1,5 @@
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -17,9 +18,11 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JSlider;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 public class App {
 	
 	private JFrame frame;
@@ -32,14 +35,29 @@ public class App {
 	
 	
 	JFrame mainFrame;
-	JButton clearBtn, blackBtn, blueBtn, greenBtn, redBtn;
-	JLabel enterWord;
+	JButton clearBtn, blackBtn, blueBtn, greenBtn, redBtn,eraserBtn;
+	JSlider strokeSize;
+	JLabel enterWord;	
 	JTextField word, enterChat;
 	TextArea chatArea;
 	DrawArea drawArea;
 	static String playerName;
 	static String portNum;
 	static String ipAddr;
+	
+	 //set values for slider
+    final int SLIDE_MIN = 5;
+    final int SLIDE_MAX = 50;
+    final int SLIDE_INIT = 5;
+    
+	ChangeListener changeListener = new ChangeListener(){
+		  public void stateChanged(ChangeEvent e){
+			  if (e.getSource() == strokeSize){
+		    	  drawArea.setStroke(strokeSize.getValue());
+		      }
+		  }
+	  };
+	  
 	ActionListener actionListener = new ActionListener() {
 	 
 	  public void actionPerformed(ActionEvent e) {
@@ -53,12 +71,15 @@ public class App {
 	        drawArea.green();
 	      } else if (e.getSource() == redBtn) {
 	        drawArea.red();
+	      } else if(e.getSource() == eraserBtn) {
+	    	drawArea.eraser();  
 	      } else if(e.getSource() == enterChat) {
 //	    	  chatArea.append(playerName + ": " + enterChat.getText() + "\n");
 	    	  if(server!=null){
 					server.broadcast(playerName +": " + enterChat.getText());
 					addChat(playerName +": " + enterChat.getText());
 				}else{
+					System.out.println(channel);
 					channel.send(playerName + ": " + enterChat.getText());
 				}
 				enterChat.setText("");
@@ -95,24 +116,39 @@ public class App {
 	    JPanel controls = new JPanel();
 	  
 	    //Insert Commands
+	    strokeSize = new JSlider(JSlider.HORIZONTAL, SLIDE_MIN, SLIDE_MAX, SLIDE_INIT);
+	    strokeSize.setPreferredSize(new Dimension(100, 100));
+	    strokeSize.addChangeListener(changeListener);
 	    clearBtn = new JButton("Clear");
 	    clearBtn.addActionListener(actionListener);
 	    blackBtn = new JButton("Black");
+	    blackBtn.setText("");
+	    blackBtn.setBackground(Color.black);
 	    blackBtn.addActionListener(actionListener);
 	    blueBtn = new JButton("Blue");
+	    blueBtn.setText("");
+	    blueBtn.setBackground(Color.blue);
 	    blueBtn.addActionListener(actionListener);
 	    greenBtn = new JButton("Green");
+	    greenBtn.setText("");
+	    greenBtn.setBackground(Color.green);
 	    greenBtn.addActionListener(actionListener);
 	    redBtn = new JButton("Red");
+	    redBtn.setText("");
+	    redBtn.setBackground(Color.red);
 	    redBtn.addActionListener(actionListener);
+	    eraserBtn = new JButton("Eraser");
+	    eraserBtn.addActionListener(actionListener);
 	 
 	    // add to controls panel
-	    controls.add(greenBtn);
+	    controls.add(clearBtn);
+	    controls.add(redBtn);
+	    controls.add(greenBtn); 
 	    controls.add(blueBtn);
 	    controls.add(blackBtn);
-	    controls.add(redBtn);
-	    controls.add(clearBtn);
-	 
+	    controls.add(strokeSize);
+	    controls.add(eraserBtn);
+	    
 	    // add to canvas panel
 	    canvas.add(controls, BorderLayout.SOUTH);
 	    
@@ -158,7 +194,7 @@ public class App {
 	    content.add(players, BorderLayout.WEST);
 	    
 	    mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		
-		mainFrame.setSize(700,550);
+		mainFrame.setSize(900,550);
 		mainFrame.setLocationRelativeTo(null);
 		mainFrame.setResizable(false);
 		mainFrame.setVisible(true);
@@ -174,6 +210,7 @@ public class App {
 		}else{
 			ClientProgram clientProgram = new ClientProgram(playerName, ipAddr, Integer.parseInt(portNum), this);
 			try {
+				
 				clientProgram.start();
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
@@ -187,11 +224,16 @@ public class App {
 		chatArea.append(msg+"\n");
 	}
 	
-	public void addSever(Server server){
+	public void addServer(Server server){
 		this.server = server;
 	}
 	
 	public void addChannel(Channel client){
 		this.channel = client;
+	
+	}
+	
+	public Channel getChannel(){
+		return this.channel;
 	}
 }
