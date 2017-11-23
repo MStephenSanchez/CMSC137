@@ -41,6 +41,11 @@ public class ClientProgram implements OnSocketListener
 		app.addChat(msg);
 	}
 	
+	public void onWord(Channel channel, String word)
+	{
+		app.addWord(word);
+	}
+	
 	public InetAddress getIp(){		
 		return 	socket.getInetAddress();
 

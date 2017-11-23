@@ -7,6 +7,7 @@ public class Channel implements Runnable
 	private Socket socket;
 	private Scanner reader;
 	private PrintWriter writer;
+	private String word;
 	
 	private boolean running;
 	
@@ -16,6 +17,13 @@ public class Channel implements Runnable
 	{
 		this.socket = socket;
 		this.onSocketListener = onSocketListener;
+	}
+	
+	public Channel(Socket socket, OnSocketListener onSocketListener, String w)
+	{
+		this.socket = socket;
+		this.onSocketListener = onSocketListener;
+		this.word = w;
 	}
 	
 	public void start()
@@ -54,8 +62,11 @@ public class Channel implements Runnable
 				{
 					String msg = reader.nextLine();
 
-					if(null != onSocketListener)
+					if(null != onSocketListener) {
 						onSocketListener.onReceived(this, msg);
+					}
+
+					onSocketListener.onWord(this, this.word);
 				}
 				catch(NoSuchElementException e)
 				{
@@ -78,6 +89,10 @@ public class Channel implements Runnable
 		// send message
 		writer.println(msg);
 		writer.flush();
+	}
+	
+	public void sendWord(String w) {
+		this.send(w);
 	}
 	
 	public Socket getSocket()

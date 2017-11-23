@@ -34,7 +34,7 @@ public class App {
 	JFrame mainFrame;
 	JButton clearBtn, blackBtn, blueBtn, greenBtn, redBtn;
 	JLabel enterWord;
-	JTextField word, enterChat;
+	JTextField word, letters, enterChat;
 	TextArea chatArea;
 	DrawArea drawArea;
 	static String playerName;
@@ -118,11 +118,15 @@ public class App {
 	    
 	    //Enter word to guess panel
 	    JPanel wordPanel = new JPanel();
-	    enterWord = new JLabel("Enter Word to Draw:", JLabel.CENTER);
+	    enterWord = new JLabel("Word to be drawn:", JLabel.CENTER);
 	    word = new JTextField(20);
+	    word.setEditable(false);
+	    letters = new JTextField(20);
+	    letters.setEditable(false);
 	    
 	    wordPanel.add(enterWord);
 	    wordPanel.add(word);
+	    wordPanel.add(letters);
 	    
 	    //Chat panel
 	    JPanel chat = new JPanel();
@@ -189,6 +193,14 @@ public class App {
 	
 	public void addSever(Server server){
 		this.server = server;
+	}
+	
+	public void addWord(String w) {
+		word.setText(w);
+	}
+	
+	public String getWord() {
+		return word.getText();
 	}
 	
 	public void addChannel(Channel client){

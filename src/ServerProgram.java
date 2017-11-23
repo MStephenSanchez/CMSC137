@@ -61,12 +61,24 @@ public class ServerProgram implements OnSocketListener
 		server.broadcast(msg);
 	}
 	
+	public void onWord(Channel channel, String word)
+	{
+		app.addWord(word);
+		server.broadcast(word);
+	}
+	
+	public void sendWord(String w) {
+		server.broadcast(w);
+	}
+	
 	public void start() throws IOException
 	{
 		Scanner scanner = new Scanner(System.in);
 		
 		//System.out.print("Port : ");	// Get Port
 		int port = 8000;//Integer.parseInt(scanner.nextLine());
+		
+		//Word w = new Word();
 		
 		server = new Server(this);
 		server.bind(port); // Open Server

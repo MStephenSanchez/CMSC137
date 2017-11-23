@@ -2,7 +2,7 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 
-public class Server implements Runnable
+public class Server implements Runnable 
 {
 	private boolean running;
 	
@@ -41,6 +41,8 @@ public class Server implements Runnable
 	public void run()
 	{
 		channels = new ArrayList<>();
+		Word w = new Word();
+		//w.revealLetter(10000);
 		
 		running = true;
 		while(running)
@@ -51,11 +53,13 @@ public class Server implements Runnable
 				Socket socket = serverSocket.accept();
 				
 				// create new channel for connection
-				Channel channel = new Channel(socket, onSocketListener);
+				Channel channel = new Channel(socket, onSocketListener, w.retWord());
 				channel.start();
 				
 				// add the channel to channel list
 				channels.add(channel);
+				
+				broadcast(w.retWord());
 			} 
 			catch (SocketException e)
 			{
