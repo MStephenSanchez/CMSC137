@@ -39,7 +39,7 @@ public class Channel implements Runnable
 		try
 		{
 			OutputStream outputStream = socket.getOutputStream();
-			writer = new PrintWriter(outputStream);
+			this.writer = new PrintWriter(outputStream);
 			
 			InputStream inputStream = socket.getInputStream();
 			reader = new Scanner(inputStream);
@@ -71,6 +71,7 @@ public class Channel implements Runnable
 			e.printStackTrace();
 		}
 		
+		
 	}
 	
 	public void send(String msg)
@@ -83,5 +84,9 @@ public class Channel implements Runnable
 	public Socket getSocket()
 	{
 		return socket;
+	}
+	
+	public PrintWriter getWriter(){
+		return writer;
 	}
 }

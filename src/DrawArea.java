@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.awt.BasicStroke;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -125,6 +126,10 @@ public class DrawArea extends JComponent {
 	  repaint();
   }
   
+  
+  public void setStroke(int strokeSize){
+	  g2.setStroke(new BasicStroke(strokeSize,BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+  }
   //returns converted byte stream from image 
   private ByteArrayOutputStream getByteImage(){
 	  ByteArrayOutputStream output = new ByteArrayOutputStream();      
@@ -142,6 +147,9 @@ public class DrawArea extends JComponent {
   
   public void setDatagramServer(DatagramServer ds){
 	  this.ds = ds;
+  }
+  public void eraser(){
+	  g2.setPaint(Color.white);
   }
   
   public void red() {

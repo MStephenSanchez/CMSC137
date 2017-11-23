@@ -21,6 +21,7 @@ public class ClientProgram implements OnSocketListener
 	public void onConnected(Channel channel)
 	{
 			app.addChat("Connected to "+ ip);
+			app.getChannel().send(name + " has joined the game!");
 		    try {
 				new DatagramClient(app).start();
 			} catch (IOException e) {
@@ -56,5 +57,6 @@ public class ClientProgram implements OnSocketListener
 		Channel channel = new Channel(socket, this);
 		app.addChannel(channel);
 		channel.start();
+	
 	}
 }
