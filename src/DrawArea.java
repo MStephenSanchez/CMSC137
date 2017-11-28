@@ -133,7 +133,7 @@ public class DrawArea extends JComponent {
   //returns converted byte stream from image 
   private ByteArrayOutputStream getByteImage(){
 	  ByteArrayOutputStream output = new ByteArrayOutputStream();      
-	  BufferedImage bufferedImage = new BufferedImage(image.getWidth(null), image.getHeight(null),BufferedImage.TYPE_INT_ARGB);
+	  BufferedImage bufferedImage = new BufferedImage(image.getWidth(null), image.getHeight(null),BufferedImage.TYPE_INT_BGR);
 	  Graphics g = bufferedImage.getGraphics();
 	  g.drawImage(image, 0, 0, null);
 	  try {
