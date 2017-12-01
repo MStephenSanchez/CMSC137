@@ -166,8 +166,9 @@ public class App {
 	    //Enter word to guess panel
 	    wordPanel = new JPanel();
 	    wordPanel.setBackground(Color.decode("#a9c9f9"));
-	    enterWord = new JLabel("Enter Word to Draw:", JLabel.CENTER);
+	    enterWord = new JLabel("Word to be drawn:", JLabel.CENTER);
 	    word = new JTextField(20);
+	    word.setEditable(false);
 	    
 	    wordPanel.add(enterWord);
 	    wordPanel.add(word);
