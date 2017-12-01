@@ -9,12 +9,14 @@ public class ClientProgram implements OnSocketListener
 	private String ip;
 	private int port;
 	private App app;
+	private Player player;
 	
-	public ClientProgram(String name, String ip, int port, App app){
+	public ClientProgram(String name, String ip, int port, App app, Player player){
 		this.ip = ip;
 		this.port = port;
 		this.name = name;
 		this.app = app;
+		this.player = player;
 	}
 	
 	@Override
@@ -49,14 +51,13 @@ public class ClientProgram implements OnSocketListener
 	
 	public void start() throws UnknownHostException, IOException
 	{
-		Scanner scanner = new Scanner(System.in);
-		
 		socket = new Socket(ip, port);
 		
 //		Receive
 		Channel channel = new Channel(socket, this);
 		app.addChannel(channel);
 		channel.start();
+		player.add();
 	
 	}
 }

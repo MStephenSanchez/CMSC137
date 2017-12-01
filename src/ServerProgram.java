@@ -11,10 +11,12 @@ public class ServerProgram implements OnSocketListener
 	private App app;
 	private ArrayList<InetAddress> clientList = new ArrayList<InetAddress>();
 	private int currPlayerId = 0;
+	private Player player;
 	
-	public ServerProgram(String name, App app){
+	public ServerProgram(String name, App app, Player player){
 		this.name = name;
 		this.app = app;
+		this.player = player;
 	}
 	
 	public int updatePlayerIds(){
@@ -79,7 +81,7 @@ public class ServerProgram implements OnSocketListener
 	    System.out.println("ADADDss");
 		app.addServer(server);
 		app.addChat("Server has started on "+server.getIPaddress().getLocalHost().getHostAddress());	
-	    
+	    player.add();
 	}
 	
 	public Server getServer(){

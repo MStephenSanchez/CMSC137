@@ -32,18 +32,22 @@ public class App {
 	private Boolean isServer;
 	Server server=null;
 	Channel channel=null;
+	GamePlay gameplay = null;
 	
 	
 	JFrame mainFrame;
-	JButton clearBtn, blackBtn, blueBtn, greenBtn, redBtn,eraserBtn;
+	JButton clearBtn, blackBtn, blueBtn, greenBtn, redBtn,eraserBtn, start;
 	JSlider strokeSize;
-	JLabel enterWord;	
+	JLabel enterWord, countdown;	
 	JTextField word, enterChat;
 	TextArea chatArea;
 	DrawArea drawArea;
 	static String playerName;
 	static String portNum;
 	static String ipAddr;
+	JPanel canvas, controls, wordPanel, chat, cdownPanel, playersPanel;
+	
+	Player player;
 	
 	 //set values for slider
     final int SLIDE_MIN = 5;
@@ -85,6 +89,10 @@ public class App {
 				enterChat.setText("");
 //	    	  enterChat.setText("Type your guess here...");
 	    	  enterChat.selectAll();
+	      } else if(e.getSource() == start) {
+	    	  Manual manual = new Manual();
+	    	  manual.open(mainFrame);
+	    	  
 	      }
 	    }
 	  };
@@ -107,13 +115,14 @@ public class App {
 		drawArea = new DrawArea(InetAddress.getByName(ipAddr), !isServer);
 		
 		//panel for the canvas and colors
-		JPanel canvas = new JPanel();
+		canvas = new JPanel();
+		canvas.setBackground(Color.decode("#bfd7fc"));
 		canvas.setLayout(new BorderLayout());
 		
 		canvas.add(drawArea, BorderLayout.CENTER);
 		 
 	    // create controls to apply colors and call clear feature
-	    JPanel controls = new JPanel();
+	    controls = new JPanel();
 	  
 	    //Insert Commands
 	    strokeSize = new JSlider(JSlider.HORIZONTAL, SLIDE_MIN, SLIDE_MAX, SLIDE_INIT);
@@ -148,12 +157,15 @@ public class App {
 	    controls.add(blackBtn);
 	    controls.add(strokeSize);
 	    controls.add(eraserBtn);
+	    controls.setBackground(Color.decode("#bfd7fc"));
 	    
 	    // add to canvas panel
 	    canvas.add(controls, BorderLayout.SOUTH);
 	    
+	    
 	    //Enter word to guess panel
-	    JPanel wordPanel = new JPanel();
+	    wordPanel = new JPanel();
+	    wordPanel.setBackground(Color.decode("#a9c9f9"));
 	    enterWord = new JLabel("Enter Word to Draw:", JLabel.CENTER);
 	    word = new JTextField(20);
 	    
@@ -161,7 +173,7 @@ public class App {
 	    wordPanel.add(word);
 	    
 	    //Chat panel
-	    JPanel chat = new JPanel();
+	    chat = new JPanel();
 	    enterChat = new JTextField("");
 	    enterChat.addActionListener(actionListener);
 	    
@@ -172,35 +184,37 @@ public class App {
 	    chat.add(chatArea);
 	    chat.add(enterChat);
 	    
-	    //Players panel
-	    //Static players (implemented with buttons); sample
-	    JPanel players = new JPanel();
-	    players.setLayout(new BoxLayout(players, BoxLayout.PAGE_AXIS));
-	    JButton p1, p2, p3, p4;
-	    p1 = new JButton("Player1  Points:120");
-	    p2 = new JButton("Player2  Points:100");
-	    p3 = new JButton("Player3  Points:210");
-	    p4 = new JButton("Player4  Points:150");
+	    //players panel
+	    playersPanel = new JPanel();
+	    player = new Player(playerName, InetAddress.getByName(ipAddr), this) ;
+	    playersPanel.setBackground(Color.decode("#bfd7fc"));
+	    //player.add(playersPanel);
 	    
-	    players.add(p1);
-	    players.add(p2);
-	    players.add(p3);
-	    players.add(p4);
+	    cdownPanel = new JPanel();
+	    cdownPanel.setBackground(Color.decode("#a9c9f9"));
+	    cdownPanel.setLayout(new BorderLayout());
+	    start = new JButton("Help");
+	    start.addActionListener(actionListener);
+	    countdown = new JLabel("0", JLabel.CENTER);
+	    countdown.setFont (countdown.getFont ().deriveFont (28.0f));
+	    cdownPanel.add(countdown, BorderLayout.CENTER);
+	    cdownPanel.add(start, BorderLayout.EAST);
 	    
 	    //add other panels to content pane
 	    content.add(canvas, BorderLayout.CENTER);
 	    content.add(wordPanel, BorderLayout.SOUTH);
 	    content.add(chat, BorderLayout.EAST);
-	    content.add(players, BorderLayout.WEST);
+	    content.add(cdownPanel, BorderLayout.NORTH);
+	    content.add(playersPanel, BorderLayout.WEST);
 	    
 	    mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		
-		mainFrame.setSize(900,550);
+		mainFrame.setSize(900,600);
 		mainFrame.setLocationRelativeTo(null);
-		mainFrame.setResizable(false);
+		mainFrame.setResizable(true);
 		mainFrame.setVisible(true);
 		
 		if(isServer){
-			ServerProgram serverProgram = new ServerProgram(playerName, this);
+			ServerProgram serverProgram = new ServerProgram(playerName, this, player);
 			try {
 				serverProgram.start();
 			} catch (IOException e1) {
@@ -208,7 +222,7 @@ public class App {
 				e1.printStackTrace();
 			}
 		}else{
-			ClientProgram clientProgram = new ClientProgram(playerName, ipAddr, Integer.parseInt(portNum), this);
+			ClientProgram clientProgram = new ClientProgram(playerName, ipAddr, Integer.parseInt(portNum), this, player);
 			try {
 				
 				clientProgram.start();
@@ -235,5 +249,19 @@ public class App {
 	
 	public Channel getChannel(){
 		return this.channel;
+	}
+	
+	public void addGamePlay(GamePlay gameplay) {
+		this.gameplay = gameplay;
+	}
+	
+	public GamePlay getGamePlay() {
+		return this.gameplay;
+	}
+	public void updatePlayersPanel(JButton b) {
+		this.playersPanel.add(b);
+	}
+	public JPanel getPlayersPanel() {
+		return this.playersPanel;
 	}
 }
