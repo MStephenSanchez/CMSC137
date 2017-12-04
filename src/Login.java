@@ -27,7 +27,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
-import com.sun.prism.paint.Color;
+//import com.sun.prism.paint.Color;
 
 public class Login {
 	
