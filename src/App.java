@@ -33,7 +33,7 @@ public class App {
 	Server server=null;
 	Channel channel=null;
 	GamePlay gameplay = null;
-	
+	String wordString;
 	
 	JFrame mainFrame;
 	JButton clearBtn, blackBtn, blueBtn, greenBtn, redBtn,eraserBtn, start;
@@ -227,6 +227,7 @@ public class App {
 			try {
 				
 				clientProgram.start();
+				
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();

@@ -23,7 +23,7 @@ public class ClientProgram implements OnSocketListener
 	public void onConnected(Channel channel)
 	{
 			app.addChat("Connected to "+ ip);
-			app.getChannel().send(name + " has joined the game!");
+			//app.getChannel().sendString(name + " has joined the game!");
 		    try {
 				new DatagramClient(app).start();
 			} catch (IOException e) {
@@ -42,6 +42,13 @@ public class ClientProgram implements OnSocketListener
 	public void onReceived(Channel channel, String msg)
 	{
 		app.addChat(msg);
+	}
+	
+	@Override
+	public void onReceivedObject(Channel channel, Word word)
+	{
+		//DO SOMETHING
+		System.out.println(word.getWord());
 	}
 	
 	public InetAddress getIp(){		

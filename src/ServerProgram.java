@@ -41,7 +41,7 @@ public class ServerProgram implements OnSocketListener
 		for (Channel c : server.getChannels())
 		{
 			if(c != channel)
-				c.send(msg);
+				c.sendString(msg);
 		}
 	}
 	
@@ -67,6 +67,12 @@ public class ServerProgram implements OnSocketListener
 		server.broadcast(msg);
 	}
 	
+	@Override
+	public void onReceivedObject(Channel channel, Word word)
+	{
+		//DO SOMETHING
+	}
+	
 	public void start() throws IOException
 	{
 		Scanner scanner = new Scanner(System.in);
@@ -78,7 +84,7 @@ public class ServerProgram implements OnSocketListener
 		server.bind(port); // Open Server
 		server.start(); // Start Accept Thread
 	    new DatagramServer(app,clientList).start();
-	    System.out.println("ADADDss");
+	    
 		app.addServer(server);
 		app.addChat("Server has started on "+server.getIPaddress().getLocalHost().getHostAddress());	
 	    player.add();

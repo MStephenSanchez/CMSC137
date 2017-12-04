@@ -5,10 +5,11 @@ import java.util.*;
 public class Server implements Runnable
 {
 	private boolean running;
+	private WordList wordList;
 	
 	private ServerSocket serverSocket;
 	private ArrayList<Channel> channels;
-	
+	private ArrayList<Channel> objChannels;
 	private OnSocketListener onSocketListener;
 	
 	public Server(OnSocketListener onSocketListener)
@@ -52,7 +53,8 @@ public class Server implements Runnable
 	public void run()
 	{
 		channels = new ArrayList<>();
-		
+		objChannels = new ArrayList<>();
+		wordList = new WordList();
 		running = true;
 		while(running)
 		{
@@ -65,8 +67,14 @@ public class Server implements Runnable
 				Channel channel = new Channel(socket, onSocketListener);
 				channel.start();
 				
+				Word word = new Word(wordList.getRandomWord(),20);
+				
+				
 				// add the channel to channel list
 				channels.add(channel);
+				
+				
+				
 			} 
 			catch (SocketException e)
 			{
