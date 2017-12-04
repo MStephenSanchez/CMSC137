@@ -107,12 +107,46 @@ public class DrawArea extends JComponent {
   
   public void SendData() throws IOException{
 	  byte[] buffer = getByteImage().toByteArray();
+	  int session = 0;
+
 	  if(isClient){
-	      DatagramSocket datagramSocket = new DatagramSocket();
-	      DatagramPacket packet = new DatagramPacket(buffer, buffer.length, ip, port);
-	      packet.setData(buffer);
-	      datagramSocket.send(packet);
-	      datagramSocket.close();
+	      int packets = (int) Math.ceil(buffer.length / (float)(10000 - 8));
+
+			/* Loop through slices */
+			for(int i = 0; i <= packets; i++) {
+				int flags = 0;
+				flags = i == 0 ? flags | 128: flags;
+				flags = (i + 1) * (10000 - 8) > buffer.length ? flags | 64 : flags;
+
+				int size = (flags & 64) != 64 ? (10000 - 8) : buffer.length - i * (10000 - 8);
+
+				/* Set additional header */
+				byte[] data = new byte[8 + size];
+				data[0] = (byte)flags;
+				data[1] = (byte)session;
+				data[2] = (byte)packets;
+				data[3] = (byte)((10000 - 8) >> 8);
+				data[4] = (byte)(10000 - 8);
+				data[5] = (byte)i;
+				data[6] = (byte)(size >> 8);
+				data[7] = (byte)size;
+
+				/* Copy current slice to byte array */
+				System.arraycopy(buffer, i * (10000 - 8), data, 8, size);
+				/* Send multicast packet */
+				
+				DatagramSocket datagramSocket = new DatagramSocket();
+			    DatagramPacket packet = new DatagramPacket(data, data.length, ip, port);
+			    datagramSocket.send(packet);
+			    datagramSocket.close();
+				
+
+				/* Leave loop if last slice has been sent */
+				if((flags & 64) == 64) break;
+			}
+			
+			/* Increase session number */
+			session = session < 255 ? ++session : 0;
 	  }else{
 		  if(ds!=null){
 		      ds.multiSendData(buffer);
@@ -126,6 +160,10 @@ public class DrawArea extends JComponent {
 	  repaint();
   }
   
+  public void setDrawArea(BufferedImage img){
+	  g2.drawImage(img, null, 0, 0);
+	  repaint();
+  }
   
   public void setStroke(int strokeSize){
 	  g2.setStroke(new BasicStroke(strokeSize,BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));

@@ -75,7 +75,7 @@ public class ServerProgram implements OnSocketListener
 		server = new Server(this);
 		server.bind(port); // Open Server
 		server.start(); // Start Accept Thread
-	    new DatagramServer(app,clientList).start();
+	    new DatagramServer(app,clientList,server.getIPaddress().getLocalHost().getHostAddress()).start();
 	    System.out.println("ADADDss");
 		app.addServer(server);
 		app.addChat("Server has started on "+server.getIPaddress().getLocalHost().getHostAddress());	
